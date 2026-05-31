@@ -17,8 +17,8 @@ int main()
         cout << "6. Display Overdue Books\n";
         cout << "7. Calculate Total Fines\n";
         cout << "8. Exit\n";
+        cout << "Choose: ";
 
-        cout << "Enter choice: ";
         cin >> choice;
 
         switch (choice)
