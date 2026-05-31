@@ -12,12 +12,12 @@ private:
     string author;
     string borrowerName;
     int daysBorrowed;
-    bool isBorrowed;
+    bool borrowed;
 
 public:
     // Constructors
     LibraryBook();
-    LibraryBook(int, string, string);
+    LibraryBook(int id, string t, string a);
 
     // Destructor
     ~LibraryBook();
@@ -28,15 +28,22 @@ public:
     string getAuthor();
     string getBorrowerName();
     int getDaysBorrowed();
-    bool getBorrowStatus();
+    bool getBorrowed();
 
     // Setters
-    void setBorrowerName(string);
-    void setDaysBorrowed(int);
-    void setBorrowStatus(bool);
+    void setBookID(int id);
+    void setTitle(string t);
+    void setAuthor(string a);
+    void setBorrowerName(string name);
+    void setDaysBorrowed(int days);
+    void setBorrowed(bool status);
 
     // Methods
     void displayBook();
+    void borrowBook(string borrower, int days);
+    void returnBook();
+    bool isOverdue();
+    int calculateFine();
 };
 
 #endif
