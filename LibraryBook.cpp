@@ -8,7 +8,7 @@ LibraryBook::LibraryBook()
     author = "";
     borrowerName = "";
     daysBorrowed = 0;
-    isBorrowed = false;
+    borrowed = false;
 }
 
 // Parameterized constructor
@@ -19,13 +19,13 @@ LibraryBook::LibraryBook(int id, string t, string a)
     author = a;
     borrowerName = "";
     daysBorrowed = 0;
-    isBorrowed = false;
+    borrowed = false;
 }
 
 // Destructor
 LibraryBook::~LibraryBook()
 {
-    cout << "Book object destroyed." << endl;
+    cout << "Book object destroyed: " << title << endl;
 }
 
 // Getters
@@ -54,12 +54,27 @@ int LibraryBook::getDaysBorrowed()
     return daysBorrowed;
 }
 
-bool LibraryBook::getBorrowStatus()
+bool LibraryBook::getBorrowed()
 {
-    return isBorrowed;
+    return borrowed;
 }
 
 // Setters
+void LibraryBook::setBookID(int id)
+{
+    bookID = id;
+}
+
+void LibraryBook::setTitle(string t)
+{
+    title = t;
+}
+
+void LibraryBook::setAuthor(string a)
+{
+    author = a;
+}
+
 void LibraryBook::setBorrowerName(string name)
 {
     borrowerName = name;
@@ -70,19 +85,57 @@ void LibraryBook::setDaysBorrowed(int days)
     daysBorrowed = days;
 }
 
-void LibraryBook::setBorrowStatus(bool status)
+void LibraryBook::setBorrowed(bool status)
 {
-    isBorrowed = status;
+    borrowed = status;
 }
 
 // Display
 void LibraryBook::displayBook()
 {
     cout << "ID: " << bookID
-         << " | Title: " << title
-         << " | Author: " << author
-         << " | Borrower: " << borrowerName
-         << " | Days: " << daysBorrowed
-         << " | Status: " << (isBorrowed ? "Borrowed" : "Available")
-         << endl;
+         << "\nTitle: " << title
+         << "\nAuthor: " << author;
+
+    if (borrowed)
+    {
+        cout << "\nBorrower: " << borrowerName
+             << "\nDays Borrowed: " << daysBorrowed;
+    }
+
+    cout << "\nStatus: " << (borrowed ? "Borrowed" : "Available")
+         << "\n----------------------\n";
+}
+
+// Borrow
+void LibraryBook::borrowBook(string borrower, int days)
+{
+    borrowed = true;
+    borrowerName = borrower;
+    daysBorrowed = days;
+}
+
+// Return
+void LibraryBook::returnBook()
+{
+    borrowed = false;
+    borrowerName = "";
+    daysBorrowed = 0;
+}
+
+// Overdue = more than 7 days
+bool LibraryBook::isOverdue()
+{
+    return borrowed && daysBorrowed > 7;
+}
+
+// Fine = 500 per day after 7 days
+int LibraryBook::calculateFine()
+{
+    if (isOverdue())
+    {
+        return (daysBorrowed - 7) * 500;
+    }
+
+    return 0;
 }
