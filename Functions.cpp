@@ -7,7 +7,6 @@ void addBook(LibraryBook books[], int &count)
 
     cout << "Enter Book ID: ";
     cin >> id;
-
     cin.ignore();
 
     cout << "Enter Title: ";
@@ -30,9 +29,62 @@ void displayBooks(LibraryBook books[], int count)
     }
 }
 
+void borrowBookMenu(LibraryBook books[], int count)
+{
+    int id, days;
+    string borrower;
+
+    cout << "Enter Book ID: ";
+    cin >> id;
+    cin.ignore();
+
+    for (int i = 0; i < count; i++)
+    {
+        if (books[i].getBookID() == id &&
+            !books[i].getBorrowed())
+        {
+            cout << "Borrower Name: ";
+            getline(cin, borrower);
+
+            cout << "Days Borrowed: ";
+            cin >> days;
+
+            books[i].borrowBook(borrower, days);
+
+            cout << "Book borrowed.\n";
+            return;
+        }
+    }
+
+    cout << "Book not available.\n";
+}
+
+void returnBookMenu(LibraryBook books[], int count)
+{
+    int id;
+
+    cout << "Enter Book ID: ";
+    cin >> id;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (books[i].getBookID() == id &&
+            books[i].getBorrowed())
+        {
+            books[i].returnBook();
+
+            cout << "Book returned.\n";
+            return;
+        }
+    }
+
+    cout << "Book not found.\n";
+}
+
 void searchBook(LibraryBook books[], int count)
 {
     int id;
+
     cout << "Enter Book ID: ";
     cin >> id;
 
@@ -48,73 +100,11 @@ void searchBook(LibraryBook books[], int count)
     cout << "Book not found.\n";
 }
 
-void borrowBookMenu(LibraryBook books[], int count)
-{
-    int id, days;
-    string borrower;
-
-    cout << "Enter Book ID: ";
-    cin >> id;
-
-    for (int i = 0; i < count; i++)
-    {
-        if (books[i].getBookID() == id)
-        {
-            if (!books[i].getBorrowStatus())
-            {
-                cin.ignore();
-
-                cout << "Borrower Name: ";
-                getline(cin, borrower);
-
-                cout << "Days Borrowed: ";
-                cin >> days;
-
-                books[i].setBorrowerName(borrower);
-                books[i].setDaysBorrowed(days);
-                books[i].setBorrowStatus(true);
-
-                cout << "Book borrowed.\n";
-            }
-            else
-            {
-                cout << "Already borrowed.\n";
-            }
-            return;
-        }
-    }
-
-    cout << "Book not found.\n";
-}
-
-void returnBookMenu(LibraryBook books[], int count)
-{
-    int id;
-    cout << "Enter Book ID: ";
-    cin >> id;
-
-    for (int i = 0; i < count; i++)
-    {
-        if (books[i].getBookID() == id)
-        {
-            books[i].setBorrowerName("");
-            books[i].setDaysBorrowed(0);
-            books[i].setBorrowStatus(false);
-
-            cout << "Book returned.\n";
-            return;
-        }
-    }
-
-    cout << "Book not found.\n";
-}
-
 void displayOverdueBooks(LibraryBook books[], int count)
 {
     for (int i = 0; i < count; i++)
     {
-        if (books[i].getBorrowStatus() &&
-            books[i].getDaysBorrowed() > 7)
+        if (books[i].isOverdue())
         {
             books[i].displayBook();
         }
@@ -127,11 +117,8 @@ void calculateTotalFines(LibraryBook books[], int count)
 
     for (int i = 0; i < count; i++)
     {
-        if (books[i].getDaysBorrowed() > 7)
-        {
-            total += (books[i].getDaysBorrowed() - 7) * 100;
-        }
+        total += books[i].calculateFine();
     }
 
-    cout << "Total Fine: " << total << " RWF\n";
+    cout << "Total fines: " << total << endl;
 }
